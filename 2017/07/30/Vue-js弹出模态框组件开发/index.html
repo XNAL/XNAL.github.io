@@ -1,0 +1,764 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="vue,模态框,promise," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言在开发项目的过程中，经常会需要开发一些弹出框效果，但原生的alert和confirm往往都无法满足项目的要求。这次在开发基于Vue2开发的读书WebAPP的时候总共有两处需要进行提示的地方，因为一开始就没有引入其他的组件库，现在只好自己写一个模态框组件了。目前只是一个仅满足当前项目需求的初始版本，因为这个项目比较简单，也就没有保留很多的扩展功能。这个组件还是有很多扩展空间的，可以增加更多的自定">
+<meta name="keywords" content="vue,模态框,promise">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Vue.js弹出模态框组件开发">
+<meta property="og:url" content="http://yoursite.com/2017/07/30/Vue-js弹出模态框组件开发/index.html">
+<meta property="og:site_name" content="DON">
+<meta property="og:description" content="前言在开发项目的过程中，经常会需要开发一些弹出框效果，但原生的alert和confirm往往都无法满足项目的要求。这次在开发基于Vue2开发的读书WebAPP的时候总共有两处需要进行提示的地方，因为一开始就没有引入其他的组件库，现在只好自己写一个模态框组件了。目前只是一个仅满足当前项目需求的初始版本，因为这个项目比较简单，也就没有保留很多的扩展功能。这个组件还是有很多扩展空间的，可以增加更多的自定">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/dialog/dialog.gif">
+<meta property="og:image" content="http://yoursite.com/images/dialog/dialog2.gif">
+<meta property="og:updated_time" content="2017-07-30T05:56:01.344Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Vue.js弹出模态框组件开发">
+<meta name="twitter:description" content="前言在开发项目的过程中，经常会需要开发一些弹出框效果，但原生的alert和confirm往往都无法满足项目的要求。这次在开发基于Vue2开发的读书WebAPP的时候总共有两处需要进行提示的地方，因为一开始就没有引入其他的组件库，现在只好自己写一个模态框组件了。目前只是一个仅满足当前项目需求的初始版本，因为这个项目比较简单，也就没有保留很多的扩展功能。这个组件还是有很多扩展空间的，可以增加更多的自定">
+<meta name="twitter:image" content="http://yoursite.com/images/dialog/dialog.gif">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/07/30/Vue-js弹出模态框组件开发/"/>
+
+
+
+
+
+  <title>Vue.js弹出模态框组件开发 | DON</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DON</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">全栈开发、卖码为生</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-project">
+          <a href="/project/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tasks"></i> <br />
+            
+            项目
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/07/30/Vue-js弹出模态框组件开发/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Don">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DON">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">Vue.js弹出模态框组件开发</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-07-30T12:39:23+08:00">
+                2017-07-30
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/项目实战/" itemprop="url" rel="index">
+                    <span itemprop="name">项目实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在开发项目的过程中，经常会需要开发一些弹出框效果，但原生的alert和confirm往往都无法满足项目的要求。这次在开发<a href="/2017/07/30/基于Vue2开发的读书WebAPP/" title="基于Vue2开发的读书WebAPP">基于Vue2开发的读书WebAPP</a>的时候总共有两处需要进行提示的地方，因为一开始就没有引入其他的组件库，现在只好自己写一个模态框组件了。目前只是一个仅满足当前项目需求的初始版本，因为这个项目比较简单，也就没有保留很多的扩展功能。这个组件还是有很多扩展空间的，可以增加更多的自定义内容和样式。这里只介绍如何去开发一个模态框组件，有需要进行更多扩展的，可以根据自己的需求自行开发。</p>
+<h2 id="组件模板"><a href="#组件模板" class="headerlink" title="组件模板"></a>组件模板</h2><a id="more"></a> 
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line">&lt;template&gt;</div><div class="line">&lt;div class=&quot;dialog&quot;&gt;</div><div class="line">	&lt;div class=&quot;mask&quot;&gt;&lt;/div&gt;</div><div class="line">	&lt;div class=&quot;dialog-content&quot;&gt;</div><div class="line">		&lt;h3 class=&quot;title&quot;&gt;&#123;&#123; modal.title &#125;&#125;&lt;/h3&gt;</div><div class="line">		&lt;p class=&quot;text&quot;&gt;&#123;&#123; modal.text &#125;&#125;&lt;/p&gt;</div><div class="line">		&lt;div class=&quot;btn-group&quot;&gt;</div><div class="line">			&lt;div class=&quot;btn&quot; @click=&quot;cancel&quot;&gt;&#123;&#123; modal.cancelButtonText &#125;&#125;&lt;/div&gt;</div><div class="line">			&lt;div class=&quot;btn&quot; @click=&quot;submit&quot;&gt;&#123;&#123; modal.confirmButtonText &#125;&#125;&lt;/div&gt;</div><div class="line">		&lt;/div&gt;</div><div class="line">	&lt;/div&gt;</div><div class="line">&lt;/div&gt;</div><div class="line">&lt;/template&gt;</div></pre></td></tr></table></figure>
+<p>模态框结构分为：头部标题、提示内容和操作区域。同时一般还会有一个遮罩层。此次需求比较简单，也无需图标等内容，所以结构上写的也比较简单。实际开发中可根据需求对结构进行相应的调整。</p>
+<h2 id="组件样式"><a href="#组件样式" class="headerlink" title="组件样式"></a>组件样式</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div><div class="line">45</div><div class="line">46</div><div class="line">47</div><div class="line">48</div><div class="line">49</div></pre></td><td class="code"><pre><div class="line">.dialog &#123;</div><div class="line">	position: relative;</div><div class="line"></div><div class="line">    .dialog-content &#123;</div><div class="line">        position: fixed;</div><div class="line">        box-sizing: border-box;</div><div class="line">        padding: 20px;</div><div class="line">        width: 80%;</div><div class="line">        min-height: 140px;</div><div class="line">        left: 50%;</div><div class="line">        top: 50%;</div><div class="line">        transform: translate(-50%, -50%);</div><div class="line">        border-radius: 5px;</div><div class="line">        background: #fff;</div><div class="line">        z-index: 50002;</div><div class="line">        .title &#123;</div><div class="line">            font-size: 16px;</div><div class="line">            font-weight: 600;</div><div class="line">            line-height: 30px;</div><div class="line">        &#125;</div><div class="line">        .text &#123;</div><div class="line">            font-size: 14px;</div><div class="line">            line-height: 30px;</div><div class="line">            color: #555;</div><div class="line">        &#125;</div><div class="line">        .btn-group &#123;</div><div class="line">            display: flex;</div><div class="line">            position: absolute;</div><div class="line">            right: 0;</div><div class="line">            bottom: 10px;</div><div class="line">            .btn &#123;</div><div class="line">                padding: 10px 20px;</div><div class="line">                font-size: 14px;</div><div class="line">                &amp;:last-child &#123;</div><div class="line">                    color: #76D49B;</div><div class="line">                &#125;</div><div class="line">            &#125;</div><div class="line">        &#125;</div><div class="line">    &#125;</div><div class="line">    .mask &#123;</div><div class="line">        position: fixed;</div><div class="line">        top: 0;</div><div class="line">        left: 0;</div><div class="line">        bottom: 0;</div><div class="line">        right: 0;</div><div class="line">        z-index: 50001;</div><div class="line">        background: rgba(0,0,0,.5);</div><div class="line">    &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>样式比较简单，就不多说了。</p>
+<h2 id="组件接口"><a href="#组件接口" class="headerlink" title="组件接口"></a>组件接口</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div></pre></td><td class="code"><pre><div class="line">export default &#123;</div><div class="line">	name: &apos;dialog&apos;,</div><div class="line">	props: &#123;</div><div class="line">		dialogOption: Object</div><div class="line">	&#125;,</div><div class="line">	data() &#123;</div><div class="line">		return &#123;</div><div class="line">			resolve: &apos;&apos;,</div><div class="line">			reject: &apos;&apos;,</div><div class="line">			promise: &apos;&apos;, // 保存promise对象</div><div class="line">		&#125;</div><div class="line">	&#125;,</div><div class="line">	computed: &#123;</div><div class="line">		modal: function() &#123;</div><div class="line">			let options = this.dialogOption;</div><div class="line">			return &#123;</div><div class="line">				title: options.title || &apos;提示&apos;,</div><div class="line">				text: options.text,</div><div class="line">				cancelButtonText: options.cancelButtonText ? options.cancelButtonText : &apos;取消&apos;,</div><div class="line">				confirmButtonText: options.confirmButtonText ? options.confirmButtonText : &apos;确定&apos;,</div><div class="line">			&#125;</div><div class="line">		&#125;</div><div class="line">	&#125;,</div><div class="line">	methods: &#123;</div><div class="line">		//确定,将promise断定为完成态</div><div class="line">		submit() &#123;</div><div class="line">			this.resolve(&apos;submit&apos;);</div><div class="line">		&#125;,</div><div class="line">		// 取消,将promise断定为reject状态</div><div class="line">		cancel() &#123;</div><div class="line">			this.reject(&apos;cancel&apos;);</div><div class="line">		&#125;,</div><div class="line">		//显示confirm弹出,并创建promise对象，给父组件调用</div><div class="line">		confirm() &#123;</div><div class="line">			this.promise = new Promise((resolve, reject) =&gt; &#123;</div><div class="line">				this.resolve = resolve;</div><div class="line">				this.reject = reject;</div><div class="line">			&#125;);</div><div class="line">			return this.promise; //返回promise对象,给父级组件调用</div><div class="line">		&#125;</div><div class="line">	&#125;</div><div class="line"></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p>在模态框组件中定义了三个方法，核心的方法是<code>confirm</code>，此方法是提供给父级组件调用的，返回一个<code>promise</code>对象。使用<code>promise</code>对象主要是为了异步调用，因为很多时候我们使用模态框时需要根据返回结果再进行下一步处理。</p>
+<h3 id="扩展提示"><a href="#扩展提示" class="headerlink" title="扩展提示"></a>扩展提示</h3><blockquote>
+<p>如果需要扩展的话，可以通过<code>props</code>的<code>dialogOption</code>传递更多的字段，在<code>computed</code>中进行判断，比如增加一个字段<code>isShowCancelButton</code>可以控制取消按钮是否显示。其他扩展同理。</p>
+</blockquote>
+<h2 id="调用"><a href="#调用" class="headerlink" title="调用"></a>调用</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div></pre></td><td class="code"><pre><div class="line">&lt;v-dialog v-show=&quot;showDialog&quot; :dialog-option=&quot;dialogOption&quot; ref=&quot;dialog&quot;&gt;&lt;/v-dialog&gt;</div><div class="line"></div><div class="line">this.showDialog = true;</div><div class="line">this.$refs.dialog.confirm().then(() =&gt; &#123;</div><div class="line">    this.showDialog = false;</div><div class="line">    next();</div><div class="line">&#125;).catch(() =&gt; &#123;</div><div class="line">    this.showDialog = false;</div><div class="line">    next();</div><div class="line">&#125;)</div></pre></td></tr></table></figure>
+<h2 id="源码地址"><a href="#源码地址" class="headerlink" title="源码地址"></a>源码地址</h2><p><a href="https://github.com/XNAL/ReadMore/blob/master/src/components/Dialog.vue" target="_blank" rel="external">Dialog组件源码</a></p>
+<h2 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h2><p><img src="/images/dialog/dialog.gif" alt="图片描述"> <img src="/images/dialog/dialog2.gif" alt="图片描述"></p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/vue/" rel="tag"># vue</a>
+          
+            <a href="/tags/模态框/" rel="tag"># 模态框</a>
+          
+            <a href="/tags/promise/" rel="tag"># promise</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/30/基于Vue2开发的读书WebAPP/" rel="next" title="基于Vue2开发的读书WebAPP">
+                <i class="fa fa-chevron-left"></i> 基于Vue2开发的读书WebAPP
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Don" />
+          <p class="site-author-name" itemprop="name">Don</p>
+           
+              <p class="site-description motion-element" itemprop="description">全栈开发、卖码为生</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">5</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/XNAL" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://segmentfault.com/u/tdon" target="_blank" title="segmentFault">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  segmentFault
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组件模板"><span class="nav-number">2.</span> <span class="nav-text">组件模板</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组件样式"><span class="nav-number">3.</span> <span class="nav-text">组件样式</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#组件接口"><span class="nav-number">4.</span> <span class="nav-text">组件接口</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#扩展提示"><span class="nav-number">4.1.</span> <span class="nav-text">扩展提示</span></a></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#调用"><span class="nav-number">5.</span> <span class="nav-text">调用</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码地址"><span class="nav-number">6.</span> <span class="nav-text">源码地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现效果"><span class="nav-number">7.</span> <span class="nav-text">实现效果</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Don</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>
