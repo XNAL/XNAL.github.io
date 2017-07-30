@@ -1111,6 +1111,9 @@ pre .javascript .function {
   font-weight: bold;
   line-height: 1;
 }
+.post-body ul {
+  padding-left: 15px;
+}
 .post-sticky-flag {
   display: inline-block;
   font-size: 16px;
@@ -1676,7 +1679,7 @@ pre .javascript .function {
   width: 4px;
   height: 4px;
   border-radius: 50%;
-  background: #1b26ff;
+  background: #ffcd4b;
 }
 .links-of-blogroll {
   font-size: 13px;

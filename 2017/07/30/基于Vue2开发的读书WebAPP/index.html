@@ -116,7 +116,7 @@
 <meta property="og:image" content="http://yoursite.com/images/readmore/read-04.png">
 <meta property="og:image" content="http://yoursite.com/images/readmore/search.png">
 <meta property="og:image" content="http://yoursite.com/images/readmore/search-02.png">
-<meta property="og:updated_time" content="2017-07-30T05:56:11.953Z">
+<meta property="og:updated_time" content="2017-07-30T06:41:01.668Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="基于Vue2开发的读书WebAPP">
 <meta name="twitter:description" content="前言初学vue.js，官网的文档写的很清楚，看着不难。俗话说：光说不练假把式。程序猿学个新东西还是要敲出来看看效果比较好。最开始是想搞个音乐类的，毕竟天天都会听歌，但发现搞音乐类的太多了，我再搞个多没意思。考虑了一下，还是搞个看书的吧，这个还是很少有人搞的。找了找发现只有追书神器的api暴露出来了，起点之类的api找不到。最终效果因为api数据的限制，参考了起点中文网app、起点中文网web端，以">
@@ -248,7 +248,7 @@
         <li class="menu-item menu-item-categories">
           <a href="/categories/" rel="section">
             
-              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
             
             分类
           </a>
@@ -394,23 +394,56 @@
 <li>如果觉得做的还行，对您有所帮助，欢迎“start”一下。</li>
 </ul>
 </blockquote>
-<h2 id="开发中遇到的一些问题"><a href="#开发中遇到的一些问题" class="headerlink" title="开发中遇到的一些问题"></a>开发中遇到的一些问题</h2><h3 id="多个子组件循环，父组件如何处理加载状态（精选页面）"><a href="#多个子组件循环，父组件如何处理加载状态（精选页面）" class="headerlink" title="多个子组件循环，父组件如何处理加载状态（精选页面）"></a>多个子组件循环，父组件如何处理加载状态（精选页面）</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">每个子组件加载完后是同`this.$emit`通知父组件，父组件判断所有子组件加载完成后隐藏loading。</div></pre></td></tr></table></figure>
-<h3 id="跳转页面后active标记"><a href="#跳转页面后active标记" class="headerlink" title="跳转页面后active标记"></a>跳转页面后active标记</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">最开始使用url.indexOf来处理，后来直接发现vue-router的exact属性更好用。</div></pre></td></tr></table></figure>
-<h3 id="调用第三方api接口时跨域的问题"><a href="#调用第三方api接口时跨域的问题" class="headerlink" title="调用第三方api接口时跨域的问题"></a>调用第三方api接口时跨域的问题</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">1. 本地使用proxyTbale</div><div class="line"></div><div class="line">	在config/index.js中添加配置：</div><div class="line">	</div><div class="line">	&apos;/api&apos;: &#123;</div><div class="line">		target: &apos;http://api.zhuishushenqi.com&apos;,</div><div class="line">		changeOrigin: true,</div><div class="line">		pathRewrite: &#123;                </div><div class="line">		  &apos;^/api&apos;: &apos;&apos;</div><div class="line">		&#125;   </div><div class="line">	&#125;</div><div class="line">	</div><div class="line"></div><div class="line">2. 部署服务器后通过nginx代理</div><div class="line"></div><div class="line">	nginx中配置：</div><div class="line">	</div><div class="line">	location /api/ &#123;</div><div class="line">		 proxy_pass http://api.zhuishushenqi.com/;</div><div class="line">	 &#125;</div><div class="line"></div><div class="line">3. 调用接口时只需要以`/api`开头就可以</div></pre></td></tr></table></figure>
-<h3 id="服务器部署后vue-router的虚拟路由在刷新时出现404页面"><a href="#服务器部署后vue-router的虚拟路由在刷新时出现404页面" class="headerlink" title="服务器部署后vue-router的虚拟路由在刷新时出现404页面"></a>服务器部署后vue-router的虚拟路由在刷新时出现404页面</h3><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">修改nginx配置：</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">	 try_files $uri $uri/ @router;          //增加的内容</div><div class="line">	 root /home/don/book;</div><div class="line">	 index index.html;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">location @router &#123;                          //增加的内容</div><div class="line">	rewrite ^.*$ /index.html last;          //增加的内容</div><div class="line">&#125;                                           //增加的内容</div></pre></td></tr></table></figure>
+<h2 id="开发中遇到的一些问题"><a href="#开发中遇到的一些问题" class="headerlink" title="开发中遇到的一些问题"></a>开发中遇到的一些问题</h2><ul>
+<li><h3 id="多个子组件循环，父组件如何处理加载状态（精选页面）"><a href="#多个子组件循环，父组件如何处理加载状态（精选页面）" class="headerlink" title="多个子组件循环，父组件如何处理加载状态（精选页面）"></a>多个子组件循环，父组件如何处理加载状态（精选页面）</h3></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">每个子组件加载完后是同`this.$emit`通知父组件，父组件判断所有子组件加载完成后隐藏loading。</div></pre></td></tr></table></figure>
+<ul>
+<li><h3 id="跳转页面后active标记"><a href="#跳转页面后active标记" class="headerlink" title="跳转页面后active标记"></a>跳转页面后active标记</h3></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">最开始使用url.indexOf来处理，后来直接发现vue-router的exact属性更好用。</div></pre></td></tr></table></figure>
+<ul>
+<li><h3 id="调用第三方api接口时跨域的问题"><a href="#调用第三方api接口时跨域的问题" class="headerlink" title="调用第三方api接口时跨域的问题"></a>调用第三方api接口时跨域的问题</h3></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div></pre></td><td class="code"><pre><div class="line">1. 本地使用proxyTbale</div><div class="line"></div><div class="line">	在config/index.js中添加配置：</div><div class="line">	</div><div class="line">	&apos;/api&apos;: &#123;</div><div class="line">		target: &apos;http://api.zhuishushenqi.com&apos;,</div><div class="line">		changeOrigin: true,</div><div class="line">		pathRewrite: &#123;                </div><div class="line">		  &apos;^/api&apos;: &apos;&apos;</div><div class="line">		&#125;   </div><div class="line">	&#125;</div><div class="line">	</div><div class="line"></div><div class="line">2. 部署服务器后通过nginx代理</div><div class="line"></div><div class="line">	nginx中配置：</div><div class="line">	</div><div class="line">	location /api/ &#123;</div><div class="line">		 proxy_pass http://api.zhuishushenqi.com/;</div><div class="line">	 &#125;</div><div class="line"></div><div class="line">3. 调用接口时只需要以`/api`开头就可以</div></pre></td></tr></table></figure>
+<ul>
+<li><h3 id="服务器部署后vue-router的虚拟路由在刷新时出现404页面"><a href="#服务器部署后vue-router的虚拟路由在刷新时出现404页面" class="headerlink" title="服务器部署后vue-router的虚拟路由在刷新时出现404页面"></a>服务器部署后vue-router的虚拟路由在刷新时出现404页面</h3></li>
+</ul>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div></pre></td><td class="code"><pre><div class="line">修改nginx配置：</div><div class="line"></div><div class="line">location / &#123;</div><div class="line">	 try_files $uri $uri/ @router;          //增加的内容</div><div class="line">	 root /home/don/book;</div><div class="line">	 index index.html;</div><div class="line">&#125;</div><div class="line"> </div><div class="line">location @router &#123;                          //增加的内容</div><div class="line">	rewrite ^.*$ /index.html last;          //增加的内容</div><div class="line">&#125;                                           //增加的内容</div></pre></td></tr></table></figure>
 <h2 id="访问地址"><a href="#访问地址" class="headerlink" title="访问地址"></a>访问地址</h2><blockquote>
 <p><a href="http://www.qdnote.com" target="_blank" rel="external">请访问地址：http://www.qdnote.com</a>（pc端请用chrome手机模式预览）<br>扫描下面的二维码<br><img src="/images/readmore/QRcode.png" alt="二维码"></p>
 </blockquote>
-<h2 id="部分截图"><a href="#部分截图" class="headerlink" title="部分截图"></a>部分截图</h2><h3 id="我的书架"><a href="#我的书架" class="headerlink" title="我的书架"></a>我的书架</h3><p><img src="/images/readmore/shelf-01.png" alt="我的书架"></p>
+<h2 id="部分截图"><a href="#部分截图" class="headerlink" title="部分截图"></a>部分截图</h2><ul>
+<li><h3 id="我的书架"><a href="#我的书架" class="headerlink" title="我的书架"></a>我的书架</h3></li>
+</ul>
 <p><img src="/images/readmore/shelf-01.png" alt="我的书架"></p>
-<h3 id="精选"><a href="#精选" class="headerlink" title="精选"></a>精选</h3><p><img src="/images/readmore/featured.png" alt="精选"></p>
-<h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3><p><img src="/images/readmore/category.png" alt="分类"><img src="/images/readmore/category-02.png" alt="分类列表"></p>
+<p><img src="/images/readmore/shelf-01.png" alt="我的书架"></p>
+<ul>
+<li><h3 id="精选"><a href="#精选" class="headerlink" title="精选"></a>精选</h3></li>
+</ul>
+<p><img src="/images/readmore/featured.png" alt="精选"></p>
+<ul>
+<li><h3 id="分类"><a href="#分类" class="headerlink" title="分类"></a>分类</h3></li>
+</ul>
+<p><img src="/images/readmore/category.png" alt="分类"><img src="/images/readmore/category-02.png" alt="分类列表"></p>
 <p><img src="/images/readmore/category-03.png" alt="分类列表"></p>
-<h3 id="排行"><a href="#排行" class="headerlink" title="排行"></a>排行</h3><p><img src="/images/readmore/rank.png" alt="排行"></p>
-<h3 id="书籍详情"><a href="#书籍详情" class="headerlink" title="书籍详情"></a>书籍详情</h3><p><img src="/images/readmore/book.png" alt="书籍详情"></p>
-<h3 id="看书"><a href="#看书" class="headerlink" title="看书"></a>看书</h3><p><img src="/images/readmore/read-01.png" alt="看书"> <img src="/images/readmore/read-02.png" alt="看书"></p>
+<ul>
+<li><h3 id="排行"><a href="#排行" class="headerlink" title="排行"></a>排行</h3></li>
+</ul>
+<p><img src="/images/readmore/rank.png" alt="排行"></p>
+<ul>
+<li><h3 id="书籍详情"><a href="#书籍详情" class="headerlink" title="书籍详情"></a>书籍详情</h3></li>
+</ul>
+<p><img src="/images/readmore/book.png" alt="书籍详情"></p>
+<ul>
+<li><h3 id="看书"><a href="#看书" class="headerlink" title="看书"></a>看书</h3></li>
+</ul>
+<p><img src="/images/readmore/read-01.png" alt="看书"> <img src="/images/readmore/read-02.png" alt="看书"></p>
 <p><img src="/images/readmore/read-03.png" alt="看书"> <img src="/images/readmore/read-04.png" alt="看书"></p>
-<h3 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h3><p><img src="/images/readmore/search.png" alt="搜索"> <img src="/images/readmore/search-02.png" alt="搜索"></p>
+<ul>
+<li><h3 id="搜索"><a href="#搜索" class="headerlink" title="搜索"></a>搜索</h3></li>
+</ul>
+<p><img src="/images/readmore/search.png" alt="搜索"> <img src="/images/readmore/search-02.png" alt="搜索"></p>
 
       
     </div>
