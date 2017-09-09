@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="node.js,canvas,socket.io," />
 
 
 
@@ -93,16 +93,20 @@
 
 
 
-<meta name="description" content="全栈开发、卖码为生">
-<meta property="og:type" content="website">
-<meta property="og:title" content="DON">
-<meta property="og:url" content="http://yoursite.com/tags/vuex/index.html">
+<meta name="description" content="前言公司开发微信小程序的项目中需要用的socket.io，所以自己先写个简单的项目来练练手，熟悉下socket.io。socket.io主要用于浏览器和服务器之间的实时通信。对HTML5中websocket进行了封装。具体的就不多说，有兴趣的话可以去官网看下。 技术栈node.js + socket.io + js + canvas">
+<meta name="keywords" content="node.js,canvas,socket.io">
+<meta property="og:type" content="article">
+<meta property="og:title" content="使用socket.io开发五子棋对战">
+<meta property="og:url" content="http://yoursite.com/2017/09/09/使用socket-io开发五子棋对战/index.html">
 <meta property="og:site_name" content="DON">
-<meta property="og:description" content="全栈开发、卖码为生">
+<meta property="og:description" content="前言公司开发微信小程序的项目中需要用的socket.io，所以自己先写个简单的项目来练练手，熟悉下socket.io。socket.io主要用于浏览器和服务器之间的实时通信。对HTML5中websocket进行了封装。具体的就不多说，有兴趣的话可以去官网看下。 技术栈node.js + socket.io + js + canvas">
 <meta property="og:locale" content="zh-Hans">
+<meta property="og:image" content="http://yoursite.com/images/gobang/gobang.png">
+<meta property="og:updated_time" content="2017-09-09T07:01:03.026Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="DON">
-<meta name="twitter:description" content="全栈开发、卖码为生">
+<meta name="twitter:title" content="使用socket.io开发五子棋对战">
+<meta name="twitter:description" content="前言公司开发微信小程序的项目中需要用的socket.io，所以自己先写个简单的项目来练练手，熟悉下socket.io。socket.io主要用于浏览器和服务器之间的实时通信。对HTML5中websocket进行了封装。具体的就不多说，有兴趣的话可以去官网看下。 技术栈node.js + socket.io + js + canvas">
+<meta name="twitter:image" content="http://yoursite.com/images/gobang/gobang.png">
 
 
 
@@ -130,13 +134,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/tags/vuex/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/09/09/使用socket-io开发五子棋对战/"/>
 
 
 
 
 
-  <title>标签: vuex | DON</title>
+  <title>使用socket.io开发五子棋对战 | DON</title>
   
 
 
@@ -161,7 +165,7 @@
     
   
 
-  <div class="container sidebar-position-left  ">
+  <div class="container sidebar-position-left page-post-detail ">
     <div class="headband"></div>
 
     <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
@@ -265,44 +269,191 @@
           <div id="content" class="content">
             
 
-  <div id="posts" class="posts-collapse">
-    <div class="collection-title">
-      <h1>vuex<small>标签</small>
-      </h1>
-    </div>
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/09/09/使用socket-io开发五子棋对战/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Don">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DON">
+    </span>
 
     
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">使用socket.io开发五子棋对战</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-09-09T14:59:00+08:00">
+                2017-09-09
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/项目实战/" itemprop="url" rel="index">
+                    <span itemprop="name">项目实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
       
 
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-    <header class="post-header">
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>公司开发微信小程序的项目中需要用的socket.io，所以自己先写个简单的项目来练练手，熟悉下socket.io。socket.io主要用于浏览器和服务器之间的实时通信。对HTML5中websocket进行了封装。具体的就不多说，有兴趣的话可以去<a href="https://socket.io/" target="_blank" rel="external">官网</a>看下。</p>
+<h2 id="技术栈"><a href="#技术栈" class="headerlink" title="技术栈"></a>技术栈</h2><p>node.js + socket.io + js + canvas</p>
+<a id="more"></a> 
+<h2 id="源码地址"><a href="#源码地址" class="headerlink" title="源码地址"></a>源码地址</h2><p><a href="https://github.com/XNAL/socketio-gobang" target="_blank" rel="external">https://github.com/XNAL/socketio-gobang</a></p>
+<h2 id="项目运行"><a href="#项目运行" class="headerlink" title="项目运行"></a>项目运行</h2><pre><code>git clone https://github.com/XNAL/socketio-gobang
+cd socketio-gobang
+npm install
 
-      <h2 class="post-title">
+node socketServer
+
+使用浏览器打开/public下的index.html文件即可
+</code></pre><h2 id="说明"><a href="#说明" class="headerlink" title="说明"></a>说明</h2><ol>
+<li><p>此项目只是简单的实现了对战的功能，项目的页面效果写的也比较水（也就能看…），此次项目的重点也不在于页面的效果。</p>
+</li>
+<li><p>需要同时至少运行两个页面才可以开始游戏，有兴趣的可以自己做下人机对战的功能。 </p>
+</li>
+</ol>
+<h2 id="项目截图"><a href="#项目截图" class="headerlink" title="项目截图"></a>项目截图</h2><p><img src="/images/gobang/gobang.png" alt="图片描述"> </p>
+
+      
+    </div>
+
+    <div>
+      
         
-            <a class="post-title-link" href="/2017/07/30/基于Vue2开发的读书WebAPP/" itemprop="url">
-              
-                <span itemprop="name">基于Vue2开发的读书WebAPP</span>
-              
-            </a>
+
+      
+    </div>
+
+    <div>
+      
         
-      </h2>
 
-      <div class="post-meta">
-        <time class="post-time" itemprop="dateCreated"
-              datetime="2017-07-30T01:44:43+08:00"
-              content="2017-07-30" >
-          07-30
-        </time>
-      </div>
+      
+    </div>
 
-    </header>
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/node-js/" rel="tag"># node.js</a>
+          
+            <a href="/tags/canvas/" rel="tag"># canvas</a>
+          
+            <a href="/tags/socket-io/" rel="tag"># socket.io</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/07/30/Vue-js弹出模态框组件开发/" rel="next" title="Vue.js弹出模态框组件开发">
+                <i class="fa fa-chevron-left"></i> Vue.js弹出模态框组件开发
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
   </article>
 
 
-    
-  </div>
 
-  
+    <div class="post-spread">
+      
+    </div>
+  </div>
 
 
           </div>
@@ -310,6 +461,10 @@
 
 
           
+  <div class="comments" id="comments">
+    
+  </div>
+
 
         </div>
         
@@ -330,8 +485,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/uploads/avatar.png"
@@ -413,6 +577,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#技术栈"><span class="nav-number">2.</span> <span class="nav-text">技术栈</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码地址"><span class="nav-number">3.</span> <span class="nav-text">源码地址</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目运行"><span class="nav-number">4.</span> <span class="nav-text">项目运行</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#说明"><span class="nav-number">5.</span> <span class="nav-text">说明</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#项目截图"><span class="nav-number">6.</span> <span class="nav-text">项目截图</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
@@ -526,10 +706,10 @@
   
 
   
-    <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
 <script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
 
-  
+
 
   
 
