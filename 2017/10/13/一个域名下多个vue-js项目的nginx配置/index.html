@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="Hexo, NexT" />
+  <meta name="keywords" content="vue.js,nginx," />
 
 
 
@@ -93,17 +93,22 @@
 
 
 
-<meta name="description" content="全栈开发、卖码为生">
+<meta name="description" content="前言这段时间又开发了一个vue.js+node.js爬虫开发一个Github排行榜的项目，加上之前的基于Vue2开发的读书WebAPP就有两个vue.js的项目需要部署了。虽然我有两个域名，但是我还是只想在一个域名下配置多个项目。对nginx不是很熟，花费了很长的时间才最终配置出想达到的效果。这里就记录一下如何配置。 实现效果 http://www.qdnote.com/: 基于Vue2开发的读书">
+<meta name="keywords" content="vue.js,nginx">
 <meta property="og:type" content="article">
 <meta property="og:title" content="一个域名下多个vue.js项目的nginx配置">
 <meta property="og:url" content="http://yoursite.com/2017/10/13/一个域名下多个vue-js项目的nginx配置/index.html">
 <meta property="og:site_name" content="DON">
-<meta property="og:description" content="全栈开发、卖码为生">
+<meta property="og:description" content="前言这段时间又开发了一个vue.js+node.js爬虫开发一个Github排行榜的项目，加上之前的基于Vue2开发的读书WebAPP就有两个vue.js的项目需要部署了。虽然我有两个域名，但是我还是只想在一个域名下配置多个项目。对nginx不是很熟，花费了很长的时间才最终配置出想达到的效果。这里就记录一下如何配置。 实现效果 http://www.qdnote.com/: 基于Vue2开发的读书">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:updated_time" content="2017-10-13T14:44:08.143Z">
+<meta property="og:image" content="http://yoursite.com/images/vue-github-rank/config.png">
+<meta property="og:image" content="http://yoursite.com/images/vue-github-rank/router.png">
+<meta property="og:image" content="http://yoursite.com/images/vue-github-rank/nginx.png">
+<meta property="og:updated_time" content="2017-10-13T14:51:57.557Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="一个域名下多个vue.js项目的nginx配置">
-<meta name="twitter:description" content="全栈开发、卖码为生">
+<meta name="twitter:description" content="前言这段时间又开发了一个vue.js+node.js爬虫开发一个Github排行榜的项目，加上之前的基于Vue2开发的读书WebAPP就有两个vue.js的项目需要部署了。虽然我有两个域名，但是我还是只想在一个域名下配置多个项目。对nginx不是很熟，花费了很长的时间才最终配置出想达到的效果。这里就记录一下如何配置。 实现效果 http://www.qdnote.com/: 基于Vue2开发的读书">
+<meta name="twitter:image" content="http://yoursite.com/images/vue-github-rank/config.png">
 
 
 
@@ -316,6 +321,28 @@
           </span>
 
           
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/经验分享/" itemprop="url" rel="index">
+                    <span itemprop="name">经验分享</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
 
           
             
@@ -340,7 +367,22 @@
       
 
       
-        
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这段时间又开发了一个<a href="https://github.com/XNAL/vue-github-rank" target="_blank" rel="external">vue.js+node.js爬虫开发一个Github排行榜</a>的项目，加上之前的<a href="https://github.com/XNAL/ReadMore" target="_blank" rel="external">基于Vue2开发的读书WebAPP</a>就有两个vue.js的项目需要部署了。虽然我有两个域名，但是我还是只想在一个域名下配置多个项目。对nginx不是很熟，花费了很长的时间才最终配置出想达到的效果。这里就记录一下如何配置。</p>
+<h2 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h2><blockquote>
+<p><a href="http://www.qdnote.com/" target="_blank" rel="external">http://www.qdnote.com/</a>: 基于Vue2开发的读书WebAPP</p>
+<p><a href="http://www.qdnote.com/vue-github-rank/" target="_blank" rel="external">http://www.qdnote.com/vue-github-rank/</a>: vue.js+node.js爬虫开发一个Github排行榜</p>
+</blockquote>
+<a id="more"></a> 
+<h2 id="vue-js配置"><a href="#vue-js配置" class="headerlink" title="vue.js配置"></a>vue.js配置</h2><blockquote>
+<h4 id="1-config-index-js"><a href="#1-config-index-js" class="headerlink" title="1. config/index.js"></a>1. config/index.js</h4></blockquote>
+<pre><code>修改 assetsPublicPath: &apos;/vue-github-rank/&apos;
+</code></pre><p><img src="/images/vue-github-rank/config.png" alt="config"></p>
+<blockquote>
+<h4 id="2-src-router-index-js文件修改"><a href="#2-src-router-index-js文件修改" class="headerlink" title="2. src/router/index.js文件修改"></a>2. src/router/index.js文件修改</h4></blockquote>
+<pre><code>添加 base: &apos;/vue-github-rank/&apos;
+</code></pre><p><img src="/images/vue-github-rank/router.png" alt="router">  </p>
+<h2 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a>nginx配置</h2><p><img src="/images/vue-github-rank/nginx.png" alt="nginx"></p>
+
       
     </div>
 
@@ -366,6 +408,14 @@
     </div>
 
     <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/vue-js/" rel="tag"># vue.js</a>
+          
+            <a href="/tags/nginx/" rel="tag"># nginx</a>
+          
+        </div>
       
 
       
@@ -432,8 +482,17 @@
       
 
       
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
 
-      <section class="site-overview sidebar-panel sidebar-panel-active">
+      <section class="site-overview sidebar-panel">
         <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
           <img class="site-author-image" itemprop="image"
                src="/uploads/avatar.png"
@@ -459,7 +518,7 @@
             
             <div class="site-state-item site-state-categories">
               <a href="/categories/index.html">
-                <span class="site-state-item-count">1</span>
+                <span class="site-state-item-count">2</span>
                 <span class="site-state-item-name">分类</span>
               </a>
             </div>
@@ -470,7 +529,7 @@
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">11</span>
+                <span class="site-state-item-count">12</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
@@ -515,6 +574,22 @@
 
       </section>
 
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现效果"><span class="nav-number">2.</span> <span class="nav-text">实现效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vue-js配置"><span class="nav-number">3.</span> <span class="nav-text">vue.js配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-config-index-js"><span class="nav-number">3.0.1.</span> <span class="nav-text">1. config/index.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-src-router-index-js文件修改"><span class="nav-number">3.0.2.</span> <span class="nav-text">2. src/router/index.js文件修改</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx配置"><span class="nav-number">4.</span> <span class="nav-text">nginx配置</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
       
 
       
