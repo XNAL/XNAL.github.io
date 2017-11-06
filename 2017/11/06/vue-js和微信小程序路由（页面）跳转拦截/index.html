@@ -77,7 +77,7 @@
 <link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
 
 
-  <meta name="keywords" content="vue.js,nginx," />
+  <meta name="keywords" content="vue.js,微信小程序,路由," />
 
 
 
@@ -93,22 +93,18 @@
 
 
 
-<meta name="description" content="前言这段时间又开发了一个vue.js+node.js爬虫开发一个Github排行榜的项目，加上之前的基于Vue2开发的读书WebAPP就有两个vue.js的项目需要部署了。虽然我有两个域名，但是我还是只想在一个域名下配置多个项目。对nginx不是很熟，花费了很长的时间才最终配置出想达到的效果。这里就记录一下如何配置。 实现效果 http://www.qdnote.com/: 基于Vue2开发的读书">
-<meta name="keywords" content="vue.js,nginx">
+<meta name="description" content="前言在开发有登录功能的项目时，不可避免的需要在路由（页面）跳转时对当前用户的权限进行一定的校验。目前我使用的比较多的vue.js提供了比较好的解决方案。在开发微信小程序时，发现官方目前并未提供相应的解决方案，根据以往的经验自己实现了路由（页面）跳转拦截。在此对两者做一个简单的对比。 vue.js的路由拦截vue.js官方称之为导航守卫。官方文档很详细，使用起来也比较简单，此处就不多说了，简单的示例">
+<meta name="keywords" content="vue.js,微信小程序,路由">
 <meta property="og:type" content="article">
-<meta property="og:title" content="一个域名下多个vue.js项目的nginx配置">
-<meta property="og:url" content="http://yoursite.com/2017/10/13/一个域名下多个vue-js项目的nginx配置/index.html">
+<meta property="og:title" content="vue.js和微信小程序路由（页面）跳转拦截">
+<meta property="og:url" content="http://yoursite.com/2017/11/06/vue-js和微信小程序路由（页面）跳转拦截/index.html">
 <meta property="og:site_name" content="DON">
-<meta property="og:description" content="前言这段时间又开发了一个vue.js+node.js爬虫开发一个Github排行榜的项目，加上之前的基于Vue2开发的读书WebAPP就有两个vue.js的项目需要部署了。虽然我有两个域名，但是我还是只想在一个域名下配置多个项目。对nginx不是很熟，花费了很长的时间才最终配置出想达到的效果。这里就记录一下如何配置。 实现效果 http://www.qdnote.com/: 基于Vue2开发的读书">
+<meta property="og:description" content="前言在开发有登录功能的项目时，不可避免的需要在路由（页面）跳转时对当前用户的权限进行一定的校验。目前我使用的比较多的vue.js提供了比较好的解决方案。在开发微信小程序时，发现官方目前并未提供相应的解决方案，根据以往的经验自己实现了路由（页面）跳转拦截。在此对两者做一个简单的对比。 vue.js的路由拦截vue.js官方称之为导航守卫。官方文档很详细，使用起来也比较简单，此处就不多说了，简单的示例">
 <meta property="og:locale" content="zh-Hans">
-<meta property="og:image" content="http://yoursite.com/images/vue-github-rank/config.png">
-<meta property="og:image" content="http://yoursite.com/images/vue-github-rank/router.png">
-<meta property="og:image" content="http://yoursite.com/images/vue-github-rank/nginx.png">
-<meta property="og:updated_time" content="2017-10-13T14:51:57.558Z">
+<meta property="og:updated_time" content="2017-11-06T14:07:19.391Z">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="一个域名下多个vue.js项目的nginx配置">
-<meta name="twitter:description" content="前言这段时间又开发了一个vue.js+node.js爬虫开发一个Github排行榜的项目，加上之前的基于Vue2开发的读书WebAPP就有两个vue.js的项目需要部署了。虽然我有两个域名，但是我还是只想在一个域名下配置多个项目。对nginx不是很熟，花费了很长的时间才最终配置出想达到的效果。这里就记录一下如何配置。 实现效果 http://www.qdnote.com/: 基于Vue2开发的读书">
-<meta name="twitter:image" content="http://yoursite.com/images/vue-github-rank/config.png">
+<meta name="twitter:title" content="vue.js和微信小程序路由（页面）跳转拦截">
+<meta name="twitter:description" content="前言在开发有登录功能的项目时，不可避免的需要在路由（页面）跳转时对当前用户的权限进行一定的校验。目前我使用的比较多的vue.js提供了比较好的解决方案。在开发微信小程序时，发现官方目前并未提供相应的解决方案，根据以往的经验自己实现了路由（页面）跳转拦截。在此对两者做一个简单的对比。 vue.js的路由拦截vue.js官方称之为导航守卫。官方文档很详细，使用起来也比较简单，此处就不多说了，简单的示例">
 
 
 
@@ -136,13 +132,13 @@
 
 
 
-  <link rel="canonical" href="http://yoursite.com/2017/10/13/一个域名下多个vue-js项目的nginx配置/"/>
+  <link rel="canonical" href="http://yoursite.com/2017/11/06/vue-js和微信小程序路由（页面）跳转拦截/"/>
 
 
 
 
 
-  <title>一个域名下多个vue.js项目的nginx配置 | DON</title>
+  <title>vue.js和微信小程序路由（页面）跳转拦截 | DON</title>
   
 
 
@@ -281,7 +277,7 @@
   
 
   <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
-    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/10/13/一个域名下多个vue-js项目的nginx配置/">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/11/06/vue-js和微信小程序路由（页面）跳转拦截/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="name" content="Don">
@@ -298,7 +294,7 @@
 
         
         
-          <h1 class="post-title" itemprop="name headline">一个域名下多个vue.js项目的nginx配置</h1>
+          <h1 class="post-title" itemprop="name headline">vue.js和微信小程序路由（页面）跳转拦截</h1>
         
 
         <div class="post-meta">
@@ -310,8 +306,8 @@
               
                 <span class="post-meta-item-text">发表于</span>
               
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-13T22:44:08+08:00">
-                2017-10-13
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-06T22:04:55+08:00">
+                2017-11-06
               </time>
             
 
@@ -367,21 +363,95 @@
       
 
       
-        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>这段时间又开发了一个<a href="https://github.com/XNAL/vue-github-rank" target="_blank" rel="external">vue.js+node.js爬虫开发一个Github排行榜</a>的项目，加上之前的<a href="https://github.com/XNAL/ReadMore" target="_blank" rel="external">基于Vue2开发的读书WebAPP</a>就有两个vue.js的项目需要部署了。虽然我有两个域名，但是我还是只想在一个域名下配置多个项目。对nginx不是很熟，花费了很长的时间才最终配置出想达到的效果。这里就记录一下如何配置。</p>
-<h2 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h2><blockquote>
-<p><a href="http://www.qdnote.com/" target="_blank" rel="external">http://www.qdnote.com/</a>: 基于Vue2开发的读书WebAPP</p>
-<p><a href="http://www.qdnote.com/vue-github-rank/" target="_blank" rel="external">http://www.qdnote.com/vue-github-rank/</a>: vue.js+node.js爬虫开发一个Github排行榜</p>
-</blockquote>
-<a id="more"></a> 
-<h2 id="vue-js配置"><a href="#vue-js配置" class="headerlink" title="vue.js配置"></a>vue.js配置</h2><blockquote>
-<h4 id="1-config-index-js"><a href="#1-config-index-js" class="headerlink" title="1. config/index.js"></a>1. config/index.js</h4></blockquote>
-<pre><code>修改 assetsPublicPath: &apos;/vue-github-rank/&apos;
-</code></pre><p><img src="/images/vue-github-rank/config.png" alt="config"></p>
-<blockquote>
-<h4 id="2-src-router-index-js文件修改"><a href="#2-src-router-index-js文件修改" class="headerlink" title="2. src/router/index.js文件修改"></a>2. src/router/index.js文件修改</h4></blockquote>
-<pre><code>添加 base: &apos;/vue-github-rank/&apos;
-</code></pre><p><img src="/images/vue-github-rank/router.png" alt="router">  </p>
-<h2 id="nginx配置"><a href="#nginx配置" class="headerlink" title="nginx配置"></a>nginx配置</h2><p><img src="/images/vue-github-rank/nginx.png" alt="nginx"></p>
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>在开发有登录功能的项目时，不可避免的需要在路由（页面）跳转时对当前用户的权限进行一定的校验。目前我使用的比较多的vue.js提供了比较好的解决方案。在开发微信小程序时，发现官方目前并未提供相应的解决方案，根据以往的经验自己实现了路由（页面）跳转拦截。在此对两者做一个简单的对比。</p>
+<h2 id="vue-js的路由拦截"><a href="#vue-js的路由拦截" class="headerlink" title="vue.js的路由拦截"></a>vue.js的路由拦截</h2><p>vue.js官方称之为<a href="https://router.vuejs.org/zh-cn/advanced/navigation-guards.html" target="_blank" rel="external">导航守卫</a>。官方文档很详细，使用起来也比较简单，此处就不多说了，简单的示例代码如下：<br><a id="more"></a></p>
+<pre><code>// routes/index.js
+const router = new Router({
+    routes: [{
+            path: &apos;/&apos;,
+            name: &apos;Login&apos;,
+            component: Login
+        },
+        {
+            path: &apos;/user&apos;,
+            name: &apos;User&apos;,
+            component: User,
+            meta: {
+                requireAuth: true
+            }
+        }]
+});
+
+// 全局导航钩子
+router.beforeEach((to, from, next) =&gt; {
+    // meta.requireAuth为true时才进行校验
+    if (to.meta.requireAuth) {
+        // 此处使用vuex进行校验，具体根据业务需求来
+        store.dispatch(&apos;checkAuth&apos;);
+        if (!store.state.checkAuth) {
+            // rediect是为了登录后重定向到当前页面
+            next({
+                path: &apos;/&apos;,
+                query: {
+                    redirect: to.fullPath
+                }
+            });
+        } else {
+            next();
+        }
+    } else {
+        next();
+    }
+});
+</code></pre><h2 id="微信小程序的路由拦截"><a href="#微信小程序的路由拦截" class="headerlink" title="微信小程序的路由拦截"></a>微信小程序的路由拦截</h2><p>因为微信小程序官方并没有提供官方的解决方案，所以这里只能自己去实现一个。如果对node.js比较熟悉的话，应该对express/koa框架中的经常提到的中间件概念比较熟悉，这里就使用中间件的机制来处理。结合小程序中<a href="https://mp.weixin.qq.com/debug/wxadoc/dev/framework/app-service/page.html" target="_blank" rel="external">Page()函数</a>和生命周期，具体代码如下：</p>
+<pre><code>// utils/filter.js
+function loginCheck(pageObj) {
+    if (pageObj.onLoad) {
+        let _onLoad = pageObj.onLoad;
+        // 使用onLoad的话需要传递options
+        pageObj.onLoad = function (options) {
+            if(wx.getStorageSync(&apos;USERID&apos;)) {
+                // 获取当前页面
+                let currentInstance = getPageInstance();
+                _onLoad.call(currentInstance, options);
+
+            } else {
+                //跳转到登录页
+                wx.redirectTo({
+                    url: &quot;/pages/login/login&quot;
+                });
+            }
+        }
+    }
+    return pageObj;
+}
+
+// 获取当前页面    
+function getPageInstance() {
+    var pages = getCurrentPages();
+    return pages[pages.length - 1];
+}
+
+exports.loginCheck = loginCheck;
+</code></pre><p>以上，通用的过滤函数就写好了。在需要使用的页面引入该方法即可：</p>
+<pre><code>// pages/user/user.js
+const filter = require(&apos;../../utils/filter&apos;);
+Page(filter.loginCheck({
+    // ...
+    onLoad: function (options) {
+       // ...
+    },
+    // ...
+}));
+</code></pre><h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>相比vue.js官方提供的路由拦截功能，自己实现微信小程序的路由拦截还是存在一定的不足。比如：</p>
+<ol>
+<li><p>微信小程序需要进行路由拦截的每个页面都需要引入，并包装一层，使用起来还是比较繁琐的。</p>
+</li>
+<li><p>vue.js是每次跳转到新的路由（页面）前进行处理，校验通过会跳转到新页面，不通过则直接跳转到登陆页面；而微信小程序这里，会先跳转到新页面，校验不通过会再次跳转到登陆页面。</p>
+</li>
+</ol>
+<p>目前在微信小程序这方面如果有比较好的解决方案的话，可以相互交流一下。</p>
+<p>路由跳转拦截是一个非常常用的功能，希望后续微信小程序官方能给出一个比较好的官方解决方案。</p>
 
       
     </div>
@@ -413,7 +483,9 @@
           
             <a href="/tags/vue-js/" rel="tag"># vue.js</a>
           
-            <a href="/tags/nginx/" rel="tag"># nginx</a>
+            <a href="/tags/微信小程序/" rel="tag"># 微信小程序</a>
+          
+            <a href="/tags/路由/" rel="tag"># 路由</a>
           
         </div>
       
@@ -426,8 +498,8 @@
         <div class="post-nav">
           <div class="post-nav-next post-nav-item">
             
-              <a href="/2017/10/09/vue-js-node-js爬虫开发一个Github排行榜/" rel="next" title="vue.js+node.js爬虫开发一个Github排行榜">
-                <i class="fa fa-chevron-left"></i> vue.js+node.js爬虫开发一个Github排行榜
+              <a href="/2017/10/29/微信小程序通讯录demo/" rel="next" title="微信小程序通讯录demo">
+                <i class="fa fa-chevron-left"></i> 微信小程序通讯录demo
               </a>
             
           </div>
@@ -435,10 +507,6 @@
           <span class="post-nav-divider"></span>
 
           <div class="post-nav-prev post-nav-item">
-            
-              <a href="/2017/10/29/微信小程序通讯录demo/" rel="prev" title="微信小程序通讯录demo">
-                微信小程序通讯录demo <i class="fa fa-chevron-right"></i>
-              </a>
             
           </div>
         </div>
@@ -588,7 +656,7 @@
             
 
             
-              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现效果"><span class="nav-number">2.</span> <span class="nav-text">实现效果</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vue-js配置"><span class="nav-number">3.</span> <span class="nav-text">vue.js配置</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-config-index-js"><span class="nav-number">3.0.1.</span> <span class="nav-text">1. config/index.js</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-src-router-index-js文件修改"><span class="nav-number">3.0.2.</span> <span class="nav-text">2. src/router/index.js文件修改</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#nginx配置"><span class="nav-number">4.</span> <span class="nav-text">nginx配置</span></a></li></ol></div>
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#vue-js的路由拦截"><span class="nav-number">2.</span> <span class="nav-text">vue.js的路由拦截</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#微信小程序的路由拦截"><span class="nav-number">3.</span> <span class="nav-text">微信小程序的路由拦截</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">4.</span> <span class="nav-text">总结</span></a></li></ol></div>
             
 
           </div>
