@@ -1,0 +1,791 @@
+<!DOCTYPE html>
+
+
+
+  
+
+
+<html class="theme-next mist use-motion" lang="zh-Hans">
+<head>
+  <meta charset="UTF-8"/>
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+
+
+
+
+
+
+
+
+
+<meta http-equiv="Cache-Control" content="no-transform" />
+<meta http-equiv="Cache-Control" content="no-siteapp" />
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  
+  <link href="/lib/fancybox/source/jquery.fancybox.css?v=2.1.5" rel="stylesheet" type="text/css" />
+
+
+
+
+  
+  
+  
+  
+
+  
+    
+    
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+    
+    
+    <link href="//fonts.googleapis.com/css?family=Lato:300,300italic,400,400italic,700,700italic&subset=latin,latin-ext" rel="stylesheet" type="text/css">
+  
+
+
+
+
+
+
+<link href="/lib/font-awesome/css/font-awesome.min.css?v=4.6.2" rel="stylesheet" type="text/css" />
+
+<link href="/css/main.css?v=5.1.1" rel="stylesheet" type="text/css" />
+
+
+  <meta name="keywords" content="Vue.js,Koa.js,JWT,博客," />
+
+
+
+
+
+
+
+
+  <link rel="shortcut icon" type="image/x-icon" href="/favicon.ico?v=5.1.1" />
+
+
+
+
+
+
+<meta name="description" content="前言 JWT(JSON Web Token)，是为了在网络环境间传递声明而执行的一种基于JSON的开放标准（RFC 7519）。  更多的介绍和说明，以及各种原理，我在此就不多赘诉了。JWT不是一个新鲜的东西，网上相关的介绍已经非常多了。不是很了解的可以在网上搜索一下相关信息。 源码Talk is cheap. Show me the code. 工作流程">
+<meta name="keywords" content="Vue.js,Koa.js,JWT,博客">
+<meta property="og:type" content="article">
+<meta property="og:title" content="个人博客开发系列：Vue.js + Koa.js中使用JWT认证">
+<meta property="og:url" content="http://yoursite.com/2017/12/02/个人博客开发系列：Vue-js-Koa-js中使用JWT认证/index.html">
+<meta property="og:site_name" content="DON">
+<meta property="og:description" content="前言 JWT(JSON Web Token)，是为了在网络环境间传递声明而执行的一种基于JSON的开放标准（RFC 7519）。  更多的介绍和说明，以及各种原理，我在此就不多赘诉了。JWT不是一个新鲜的东西，网上相关的介绍已经非常多了。不是很了解的可以在网上搜索一下相关信息。 源码Talk is cheap. Show me the code. 工作流程">
+<meta property="og:locale" content="zh-Hans">
+<meta property="og:updated_time" content="2017-12-02T10:55:13.659Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="个人博客开发系列：Vue.js + Koa.js中使用JWT认证">
+<meta name="twitter:description" content="前言 JWT(JSON Web Token)，是为了在网络环境间传递声明而执行的一种基于JSON的开放标准（RFC 7519）。  更多的介绍和说明，以及各种原理，我在此就不多赘诉了。JWT不是一个新鲜的东西，网上相关的介绍已经非常多了。不是很了解的可以在网上搜索一下相关信息。 源码Talk is cheap. Show me the code. 工作流程">
+
+
+
+<script type="text/javascript" id="hexo.configurations">
+  var NexT = window.NexT || {};
+  var CONFIG = {
+    root: '/',
+    scheme: 'Mist',
+    sidebar: {"position":"left","display":"hide","offset":12,"offset_float":0,"b2t":false,"scrollpercent":false,"onmobile":false},
+    fancybox: true,
+    motion: true,
+    duoshuo: {
+      userId: '0',
+      author: '博主'
+    },
+    algolia: {
+      applicationID: '',
+      apiKey: '',
+      indexName: '',
+      hits: {"per_page":10},
+      labels: {"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}
+    }
+  };
+</script>
+
+
+
+  <link rel="canonical" href="http://yoursite.com/2017/12/02/个人博客开发系列：Vue-js-Koa-js中使用JWT认证/"/>
+
+
+
+
+
+  <title>个人博客开发系列：Vue.js + Koa.js中使用JWT认证 | DON</title>
+  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</head>
+
+<body itemscope itemtype="http://schema.org/WebPage" lang="zh-Hans">
+
+  
+  
+    
+  
+
+  <div class="container sidebar-position-left page-post-detail ">
+    <div class="headband"></div>
+
+    <header id="header" class="header" itemscope itemtype="http://schema.org/WPHeader">
+      <div class="header-inner"><div class="site-brand-wrapper">
+  <div class="site-meta ">
+    
+
+    <div class="custom-logo-site-title">
+      <a href="/"  class="brand" rel="start">
+        <span class="logo-line-before"><i></i></span>
+        <span class="site-title">DON</span>
+        <span class="logo-line-after"><i></i></span>
+      </a>
+    </div>
+      
+        <p class="site-subtitle">全栈开发、卖码为生</p>
+      
+  </div>
+
+  <div class="site-nav-toggle">
+    <button>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+      <span class="btn-bar"></span>
+    </button>
+  </div>
+</div>
+
+<nav class="site-nav">
+  
+
+  
+    <ul id="menu" class="menu">
+      
+        
+        <li class="menu-item menu-item-home">
+          <a href="/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-home"></i> <br />
+            
+            首页
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-archives">
+          <a href="/archives/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-archive"></i> <br />
+            
+            归档
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-project">
+          <a href="/project/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tasks"></i> <br />
+            
+            项目
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-categories">
+          <a href="/categories/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-th"></i> <br />
+            
+            分类
+          </a>
+        </li>
+      
+        
+        <li class="menu-item menu-item-tags">
+          <a href="/tags/" rel="section">
+            
+              <i class="menu-item-icon fa fa-fw fa-tags"></i> <br />
+            
+            标签
+          </a>
+        </li>
+      
+
+      
+    </ul>
+  
+
+  
+</nav>
+
+
+
+ </div>
+    </header>
+
+    <main id="main" class="main">
+      <div class="main-inner">
+        <div class="content-wrap">
+          <div id="content" class="content">
+            
+
+  <div id="posts" class="posts-expand">
+    
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal " itemscope itemtype="http://schema.org/Article">
+    <link itemprop="mainEntityOfPage" href="http://yoursite.com/2017/12/02/个人博客开发系列：Vue-js-Koa-js中使用JWT认证/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="Don">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="/uploads/avatar.png">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="DON">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">个人博客开发系列：Vue.js + Koa.js中使用JWT认证</h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-12-02T18:52:50+08:00">
+                2017-12-02
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+            <span class="post-category" >
+            
+              <span class="post-meta-divider">|</span>
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-folder-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">分类于</span>
+              
+              
+                <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
+                  <a href="/categories/项目实战/" itemprop="url" rel="index">
+                    <span itemprop="name">项目实战</span>
+                  </a>
+                </span>
+
+                
+                
+              
+            </span>
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        <h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><blockquote>
+<p>JWT(JSON Web Token)，是为了在网络环境间传递声明而执行的一种基于JSON的开放标准（RFC 7519）。</p>
+</blockquote>
+<p>更多的介绍和说明，以及各种原理，我在此就不多赘诉了。JWT不是一个新鲜的东西，网上相关的介绍已经非常多了。不是很了解的可以在网上搜索一下相关信息。</p>
+<h2 id="源码"><a href="#源码" class="headerlink" title="源码"></a>源码</h2><p><a href="https://github.com/XNAL/don-blog-backManage/tree/master/server/middlreware" target="_blank" rel="external">Talk is cheap. Show me the code.</a></p>
+<h2 id="工作流程"><a href="#工作流程" class="headerlink" title="工作流程"></a>工作流程</h2><a id="more"></a>
+<p>JWT本质来说是一个token。在前后端进行HTTP连接时来进行相应的验证。</p>
+<ol>
+<li>博客的后台管理系统发起登录请求，后端服务器校验成功之后，生成JWT认证信息；</li>
+<li>前端接收到JWT后进行存储；</li>
+<li>前端在之后每次接口调用发起HTTP请求时，会将JWT放到HTTP的headers参数里的authorization中一起发送给后端；</li>
+<li>后端接收到请求时会根据JWT中的信息来校验当前发起HTTP请求的用户是否是具有访问权限的，有访问权限时则交给服务器继续处理，没有时则直接返回401错误。</li>
+</ol>
+<h2 id="实现过程"><a href="#实现过程" class="headerlink" title="实现过程"></a>实现过程</h2><h4 id="1-登录成功生成JWT"><a href="#1-登录成功生成JWT" class="headerlink" title="1. 登录成功生成JWT"></a>1. 登录成功生成JWT</h4><blockquote>
+<p>说明：以下代码只保留了核心代码，详细代码可在对应文件中查看，下同。</p>
+</blockquote>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// /server/api/admin/admin.controller.js</span></div><div class="line"><span class="keyword">const</span> jwt = <span class="built_in">require</span>(<span class="string">'jsonwebtoken'</span>);</div><div class="line"><span class="keyword">const</span> config = <span class="built_in">require</span>(<span class="string">'../../config/config'</span>);</div><div class="line"></div><div class="line">exports.login = <span class="keyword">async</span>(ctx) =&gt; &#123;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">  <span class="keyword">if</span> (hashedPassword === hashPassword) &#123;</div><div class="line">    <span class="comment">// ...</span></div><div class="line">    <span class="comment">// 用户token</span></div><div class="line">    <span class="keyword">const</span> userToken = &#123;</div><div class="line">      name: userName,</div><div class="line">      id: results[<span class="number">0</span>].id</div><div class="line">    &#125;;</div><div class="line">    <span class="comment">// 签发token</span></div><div class="line">    <span class="keyword">const</span> token = jwt.sign(userToken, config.tokenSecret, &#123; <span class="attr">expiresIn</span>: <span class="string">'2h'</span> &#125;);</div><div class="line">    <span class="comment">// ...</span></div><div class="line">  &#125;</div><div class="line">  <span class="comment">// ...</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="2-添加中间件校验JWT"><a href="#2-添加中间件校验JWT" class="headerlink" title="2. 添加中间件校验JWT"></a>2. 添加中间件校验JWT</h4><figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div><div class="line">26</div><div class="line">27</div><div class="line">28</div><div class="line">29</div><div class="line">30</div><div class="line">31</div><div class="line">32</div><div class="line">33</div><div class="line">34</div><div class="line">35</div><div class="line">36</div><div class="line">37</div><div class="line">38</div><div class="line">39</div><div class="line">40</div><div class="line">41</div><div class="line">42</div><div class="line">43</div><div class="line">44</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// /server/middlreware/tokenError.js</span></div><div class="line"><span class="keyword">const</span> jwt = <span class="built_in">require</span>(<span class="string">'jsonwebtoken'</span>);</div><div class="line"><span class="keyword">const</span> config = <span class="built_in">require</span>(<span class="string">'../config/config'</span>);</div><div class="line"><span class="keyword">const</span> util = <span class="built_in">require</span>(<span class="string">'util'</span>);</div><div class="line"><span class="keyword">const</span> verify = util.promisify(jwt.verify);</div><div class="line"></div><div class="line"><span class="comment">/**</span></div><div class="line"><span class="comment"> * 判断token是否可用</span></div><div class="line"><span class="comment"> */</span></div><div class="line"><span class="built_in">module</span>.exports = <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">  <span class="keyword">return</span> <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params">ctx, next</span>) </span>&#123;</div><div class="line">    <span class="keyword">try</span> &#123;</div><div class="line">      <span class="comment">// 获取jwt</span></div><div class="line">      <span class="keyword">const</span> token = ctx.header.authorization; </div><div class="line">      <span class="keyword">if</span> (token) &#123;</div><div class="line">        <span class="keyword">try</span> &#123;</div><div class="line">          <span class="comment">// 解密payload，获取用户名和ID</span></div><div class="line">          <span class="keyword">let</span> payload = <span class="keyword">await</span> verify(token.split(<span class="string">' '</span>)[<span class="number">1</span>], config.tokenSecret);</div><div class="line">          ctx.user = &#123;</div><div class="line">            name: payload.name,</div><div class="line">            id: payload.id</div><div class="line">          &#125;;</div><div class="line">        &#125; <span class="keyword">catch</span> (err) &#123;</div><div class="line">          <span class="built_in">console</span>.log(<span class="string">'token verify fail: '</span>, err)</div><div class="line">        &#125;</div><div class="line">      &#125;</div><div class="line">      <span class="keyword">await</span> next();</div><div class="line">    &#125; <span class="keyword">catch</span> (err) &#123;</div><div class="line">      <span class="keyword">if</span> (err.status === <span class="number">401</span>) &#123;</div><div class="line">        ctx.status = <span class="number">401</span>;</div><div class="line">        ctx.body = &#123;</div><div class="line">          success: <span class="number">0</span>,</div><div class="line">          message: <span class="string">'认证失败'</span></div><div class="line">        &#125;;</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">        err.status = <span class="number">404</span>;</div><div class="line">        ctx.body = &#123;</div><div class="line">          success: <span class="number">0</span>,</div><div class="line">          message: <span class="string">'404'</span></div><div class="line">        &#125;;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<h4 id="3-Koa-js中添加JWT处理"><a href="#3-Koa-js中添加JWT处理" class="headerlink" title="3. Koa.js中添加JWT处理"></a>3. Koa.js中添加JWT处理</h4><p>此处在开发时需要过滤掉登录接口(login)，否则会导致JWT验证永远失败。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// /server/config/koa.js</span></div><div class="line"><span class="keyword">const</span> jwt = <span class="built_in">require</span>(<span class="string">'koa-jwt'</span>);</div><div class="line"><span class="keyword">const</span> tokenError = <span class="built_in">require</span>(<span class="string">'../middlreware/tokenError'</span>);</div><div class="line"><span class="comment">// ...</span></div><div class="line"></div><div class="line"><span class="keyword">const</span> app = <span class="keyword">new</span> Koa();</div><div class="line"></div><div class="line">app.use(tokenError());</div><div class="line">app.use(bodyParser());</div><div class="line">app.use(koaJson());</div><div class="line">app.use(resource(path.join(config.root, config.appPath)));</div><div class="line"></div><div class="line">app.use(jwt(&#123;</div><div class="line">  secret: config.tokenSecret</div><div class="line">&#125;).unless(&#123;</div><div class="line">  path: [<span class="regexp">/^\/backapi\/admin\/login/</span>, /^\/blogapi\<span class="comment">//]</span></div><div class="line">&#125;));</div><div class="line"></div><div class="line"><span class="built_in">module</span>.exports = app;</div></pre></td></tr></table></figure>
+<h4 id="4-前端处理"><a href="#4-前端处理" class="headerlink" title="4.前端处理"></a>4.前端处理</h4><blockquote>
+<p>前端开发使用的是Vue.js，发送HTTP请求使用的是axios。</p>
+</blockquote>
+<ol>
+<li><p>登录成功之后将JWT存储到localStorage中（可根据个人需要存储，我个人是比较喜欢存储到localStorage中）。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line">methods: &#123;</div><div class="line">    login: <span class="keyword">async</span> <span class="function"><span class="keyword">function</span> (<span class="params"></span>) </span>&#123;</div><div class="line">      <span class="comment">// ...</span></div><div class="line"></div><div class="line">      <span class="keyword">let</span> res = <span class="keyword">await</span> api.login(<span class="keyword">this</span>.userName, <span class="keyword">this</span>.password);</div><div class="line">      <span class="keyword">if</span> (res.success === <span class="number">1</span>) &#123;</div><div class="line">        <span class="keyword">this</span>.errMsg = <span class="string">''</span>;</div><div class="line">        localStorage.setItem(<span class="string">'DON_BLOG_TOKEN'</span>, res.token);</div><div class="line">        <span class="keyword">this</span>.$router.push(&#123; <span class="attr">path</span>: <span class="string">'/postlist'</span> &#125;);</div><div class="line">      &#125; <span class="keyword">else</span> &#123;</div><div class="line">        <span class="keyword">this</span>.errMsg = res.message;</div><div class="line">      &#125;</div><div class="line">    &#125;</div><div class="line">  &#125;</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+<li><p>Vue.js的router（路由）跳转前校验JWT是否存在，不存在则跳转到登录页面。</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// /src/router/index.js</span></div><div class="line">router.beforeEach(<span class="function">(<span class="params">to, <span class="keyword">from</span>, next</span>) =&gt;</span> &#123;</div><div class="line">  <span class="keyword">if</span> (to.meta.requireAuth) &#123;</div><div class="line">    <span class="keyword">const</span> token = localStorage.getItem(<span class="string">'DON_BLOG_TOKEN'</span>);</div><div class="line">    <span class="keyword">if</span> (token &amp;&amp; token !== <span class="string">'null'</span>) &#123;</div><div class="line">      next();</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      next(<span class="string">'/login'</span>);</div><div class="line">    &#125;</div><div class="line">  &#125; <span class="keyword">else</span> &#123;</div><div class="line">    next();</div><div class="line">  &#125;</div><div class="line">&#125;);</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+<li><p>axios拦截器中给HTTP统一添加Authorization信息</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// /src/fetch/fetch.js</span></div><div class="line">axios.interceptors.request.use(</div><div class="line">  config =&gt; &#123;</div><div class="line">    <span class="keyword">const</span> token = localStorage.getItem(<span class="string">'DON_BLOG_TOKEN'</span>);</div><div class="line">    <span class="keyword">if</span> (token) &#123;</div><div class="line">      <span class="comment">// Bearer是JWT的认证头部信息</span></div><div class="line">      config.headers.common[<span class="string">'Authorization'</span>] = <span class="string">'Bearer '</span> + token;</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> config;</div><div class="line">  &#125;,</div><div class="line">  error =&gt; &#123;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.reject(error);</div><div class="line">  &#125;</div><div class="line">);</div></pre></td></tr></table></figure>
+<p>​</p>
+</li>
+<li><p>axios拦截器在接收到HTTP返回时统一处理返回状态</p>
+<figure class="highlight javascript"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div><div class="line">16</div><div class="line">17</div><div class="line">18</div><div class="line">19</div><div class="line">20</div><div class="line">21</div><div class="line">22</div><div class="line">23</div><div class="line">24</div><div class="line">25</div></pre></td><td class="code"><pre><div class="line"><span class="comment">// /src/main.js</span></div><div class="line">axios.interceptors.response.use(</div><div class="line">  response =&gt; &#123;</div><div class="line">    <span class="keyword">return</span> response;</div><div class="line">  &#125;,</div><div class="line">  error =&gt; &#123;</div><div class="line">    <span class="keyword">if</span> (error.response.status === <span class="number">401</span>) &#123;</div><div class="line">      Vue.prototype.$msgBox.showMsgBox(&#123;</div><div class="line">        title: <span class="string">'错误提示'</span>,</div><div class="line">        content: <span class="string">'您的登录信息已失效，请重新登录'</span>,</div><div class="line">        isShowCancelBtn: <span class="literal">false</span></div><div class="line">      &#125;).then(<span class="function">(<span class="params">val</span>) =&gt;</span> &#123;</div><div class="line">        router.push(<span class="string">'/login'</span>);</div><div class="line">      &#125;).catch(<span class="function"><span class="params">()</span> =&gt;</span> &#123;</div><div class="line">        <span class="built_in">console</span>.log(<span class="string">'cancel'</span>);</div><div class="line">      &#125;);</div><div class="line">    &#125; <span class="keyword">else</span> &#123;</div><div class="line">      Vue.prototype.$message.showMessage(&#123;</div><div class="line">        type: <span class="string">'error'</span>,</div><div class="line">        content: <span class="string">'系统出现错误'</span></div><div class="line">      &#125;);</div><div class="line">    &#125;</div><div class="line">    <span class="keyword">return</span> <span class="built_in">Promise</span>.reject(error);</div><div class="line">  &#125;</div><div class="line">);</div></pre></td></tr></table></figure>
+</li>
+</ol>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>到这里整个流程就走完了。当然单纯的JWT并不是说绝对安全的，不过对于一个个人博客系统的认证来说还是足够的。</p>
+<p>最后打个小广告。目前正在开发新版的个人博客中，包括<a href="https://github.com/XNAL/don-blog" target="_blank" rel="external">前端</a>和<a href="https://github.com/XNAL/don-blog-backManage" target="_blank" rel="external">后端</a>两部分，都已在GitHub上开源，目前在逐步完善功能中。欢迎感兴趣的同学fork和star。</p>
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <div>
+      
+        
+
+      
+    </div>
+
+    <footer class="post-footer">
+      
+        <div class="post-tags">
+          
+            <a href="/tags/Vue-js/" rel="tag"># Vue.js</a>
+          
+            <a href="/tags/Koa-js/" rel="tag"># Koa.js</a>
+          
+            <a href="/tags/JWT/" rel="tag"># JWT</a>
+          
+            <a href="/tags/博客/" rel="tag"># 博客</a>
+          
+        </div>
+      
+
+      
+      
+      
+
+      
+        <div class="post-nav">
+          <div class="post-nav-next post-nav-item">
+            
+              <a href="/2017/11/18/vue-js开发一个全局调用的MessageBox组件/" rel="next" title="vue.js开发一个全局调用的MessageBox组件">
+                <i class="fa fa-chevron-left"></i> vue.js开发一个全局调用的MessageBox组件
+              </a>
+            
+          </div>
+
+          <span class="post-nav-divider"></span>
+
+          <div class="post-nav-prev post-nav-item">
+            
+          </div>
+        </div>
+      
+
+      
+      
+    </footer>
+  </article>
+
+
+
+    <div class="post-spread">
+      
+    </div>
+  </div>
+
+
+          </div>
+          
+
+
+          
+  <div class="comments" id="comments">
+    
+  </div>
+
+
+        </div>
+        
+          
+  
+  <div class="sidebar-toggle">
+    <div class="sidebar-toggle-line-wrap">
+      <span class="sidebar-toggle-line sidebar-toggle-line-first"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-middle"></span>
+      <span class="sidebar-toggle-line sidebar-toggle-line-last"></span>
+    </div>
+  </div>
+
+  <aside id="sidebar" class="sidebar">
+    
+    <div class="sidebar-inner">
+
+      
+
+      
+        <ul class="sidebar-nav motion-element">
+          <li class="sidebar-nav-toc sidebar-nav-active" data-target="post-toc-wrap" >
+            文章目录
+          </li>
+          <li class="sidebar-nav-overview" data-target="site-overview">
+            站点概览
+          </li>
+        </ul>
+      
+
+      <section class="site-overview sidebar-panel">
+        <div class="site-author motion-element" itemprop="author" itemscope itemtype="http://schema.org/Person">
+          <img class="site-author-image" itemprop="image"
+               src="/uploads/avatar.png"
+               alt="Don" />
+          <p class="site-author-name" itemprop="name">Don</p>
+           
+              <p class="site-description motion-element" itemprop="description">全栈开发、卖码为生</p>
+          
+        </div>
+        <nav class="site-state motion-element">
+
+          
+            <div class="site-state-item site-state-posts">
+              <a href="/archives/">
+                <span class="site-state-item-count">10</span>
+                <span class="site-state-item-name">日志</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-categories">
+              <a href="/categories/index.html">
+                <span class="site-state-item-count">2</span>
+                <span class="site-state-item-name">分类</span>
+              </a>
+            </div>
+          
+
+          
+            
+            
+            <div class="site-state-item site-state-tags">
+              <a href="/tags/index.html">
+                <span class="site-state-item-count">20</span>
+                <span class="site-state-item-name">标签</span>
+              </a>
+            </div>
+          
+
+        </nav>
+
+        
+
+        <div class="links-of-author motion-element">
+          
+            
+              <span class="links-of-author-item">
+                <a href="https://github.com/XNAL" target="_blank" title="GitHub">
+                  
+                    <i class="fa fa-fw fa-github"></i>
+                  
+                  GitHub
+                </a>
+              </span>
+            
+              <span class="links-of-author-item">
+                <a href="https://segmentfault.com/u/tdon" target="_blank" title="segmentFault">
+                  
+                    <i class="fa fa-fw fa-globe"></i>
+                  
+                  segmentFault
+                </a>
+              </span>
+            
+          
+        </div>
+
+        
+        
+
+        
+        
+
+        
+
+
+      </section>
+
+      
+      <!--noindex-->
+        <section class="post-toc-wrap motion-element sidebar-panel sidebar-panel-active">
+          <div class="post-toc">
+
+            
+              
+            
+
+            
+              <div class="post-toc-content"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#前言"><span class="nav-number">1.</span> <span class="nav-text">前言</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#源码"><span class="nav-number">2.</span> <span class="nav-text">源码</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#工作流程"><span class="nav-number">3.</span> <span class="nav-text">工作流程</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#实现过程"><span class="nav-number">4.</span> <span class="nav-text">实现过程</span></a><ol class="nav-child"><li class="nav-item nav-level-4"><a class="nav-link" href="#1-登录成功生成JWT"><span class="nav-number">4.0.1.</span> <span class="nav-text">1. 登录成功生成JWT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#2-添加中间件校验JWT"><span class="nav-number">4.0.2.</span> <span class="nav-text">2. 添加中间件校验JWT</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#3-Koa-js中添加JWT处理"><span class="nav-number">4.0.3.</span> <span class="nav-text">3. Koa.js中添加JWT处理</span></a></li><li class="nav-item nav-level-4"><a class="nav-link" href="#4-前端处理"><span class="nav-number">4.0.4.</span> <span class="nav-text">4.前端处理</span></a></li></ol></li></ol></li><li class="nav-item nav-level-2"><a class="nav-link" href="#总结"><span class="nav-number">5.</span> <span class="nav-text">总结</span></a></li></ol></div>
+            
+
+          </div>
+        </section>
+      <!--/noindex-->
+      
+
+      
+
+    </div>
+  </aside>
+
+
+        
+      </div>
+    </main>
+
+    <footer id="footer" class="footer">
+      <div class="footer-inner">
+        <div class="copyright" >
+  
+  &copy; 
+  <span itemprop="copyrightYear">2017</span>
+  <span class="with-love">
+    <i class="fa fa-heart"></i>
+  </span>
+  <span class="author" itemprop="copyrightHolder">Don</span>
+</div>
+
+
+<div class="powered-by">
+  由 <a class="theme-link" href="https://hexo.io">Hexo</a> 强力驱动
+</div>
+
+<div class="theme-info">
+  主题 -
+  <a class="theme-link" href="https://github.com/iissnan/hexo-theme-next">
+    NexT.Mist
+  </a>
+</div>
+
+
+        
+
+        
+      </div>
+    </footer>
+
+    
+      <div class="back-to-top">
+        <i class="fa fa-arrow-up"></i>
+        
+      </div>
+    
+
+  </div>
+
+  
+
+<script type="text/javascript">
+  if (Object.prototype.toString.call(window.Promise) !== '[object Function]') {
+    window.Promise = null;
+  }
+</script>
+
+
+
+
+
+
+
+
+
+  
+
+
+
+
+
+
+
+
+
+
+
+
+  
+  <script type="text/javascript" src="/lib/jquery/index.js?v=2.1.3"></script>
+
+  
+  <script type="text/javascript" src="/lib/fastclick/lib/fastclick.min.js?v=1.0.6"></script>
+
+  
+  <script type="text/javascript" src="/lib/jquery_lazyload/jquery.lazyload.js?v=1.9.7"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/velocity/velocity.ui.min.js?v=1.2.1"></script>
+
+  
+  <script type="text/javascript" src="/lib/fancybox/source/jquery.fancybox.pack.js?v=2.1.5"></script>
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/utils.js?v=5.1.1"></script>
+
+  <script type="text/javascript" src="/js/src/motion.js?v=5.1.1"></script>
+
+
+
+  
+  
+
+  
+  <script type="text/javascript" src="/js/src/scrollspy.js?v=5.1.1"></script>
+<script type="text/javascript" src="/js/src/post-details.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  <script type="text/javascript" src="/js/src/bootstrap.js?v=5.1.1"></script>
+
+
+
+  
+
+
+  
+
+
+
+
+	
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+
+
+
+
+
+  
+
+
+
+
+
+  
+
+  
+
+  
+
+  
+
+  
+
+  
+
+</body>
+</html>

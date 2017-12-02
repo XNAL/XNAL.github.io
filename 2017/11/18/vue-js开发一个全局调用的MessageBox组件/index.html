@@ -102,7 +102,7 @@
 <meta property="og:description" content="前言目前在开发个人博客项目中，一开始就没准备使用一些现在比较流行的UI库（毕竟是个人项目，多练练手还是好的），所以需要自己开发几个全局组件，这里以MessageBox为例记录下vue.js如何开发全局组件。 源码Talk is cheap. Show me the code.">
 <meta property="og:locale" content="zh-Hans">
 <meta property="og:image" content="http://yoursite.com/images/dialog/messagebox.png">
-<meta property="og:updated_time" content="2017-11-18T12:54:05.127Z">
+<meta property="og:updated_time" content="2017-12-02T10:57:05.616Z">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:title" content="vue.js开发一个全局调用的MessageBox组件">
 <meta name="twitter:description" content="前言目前在开发个人博客项目中，一开始就没准备使用一些现在比较流行的UI库（毕竟是个人项目，多练练手还是好的），所以需要自己开发几个全局组件，这里以MessageBox为例记录下vue.js如何开发全局组件。 源码Talk is cheap. Show me the code.">
@@ -478,7 +478,7 @@ const MessageBox = {};
 // vue的install方法，用于定义vue插件
 MessageBox.install = function (Vue, options) {
   const MessageBoxInstance = Vue.extend(msgboxVue);
-  let currentMsg, instance;
+  let currentMsg;
   const initInstance = () =&gt; {
     // 实例化vue实例
     currentMsg = new MessageBoxInstance();
@@ -488,7 +488,7 @@ MessageBox.install = function (Vue, options) {
   // 在Vue的原型上添加实例方法，以全局调用
   Vue.prototype.$msgBox = {
     showMsgBox (options) {
-      if (!instance) {
+      if (!currentMsg) {
         initInstance();
       }
       if (typeof options === &apos;string&apos;) {
@@ -496,7 +496,15 @@ MessageBox.install = function (Vue, options) {
       } else if (typeof options === &apos;object&apos;) {
         Object.assign(currentMsg, options);
       }
-      return currentMsg.showMsgBox();
+      return currentMsg.showMsgBox()
+        .then(val =&gt; {
+          currentMsg = null;
+          return Promise.resolve(val);
+        })
+        .catch(err =&gt; {
+          currentMsg = null;
+          return Promise.reject(err);
+        });
     }
   };
 };
@@ -571,6 +579,10 @@ Vue.use(MessageBox);
 
           <div class="post-nav-prev post-nav-item">
             
+              <a href="/2017/12/02/个人博客开发系列：Vue-js-Koa-js中使用JWT认证/" rel="prev" title="个人博客开发系列：Vue.js + Koa.js中使用JWT认证">
+                个人博客开发系列：Vue.js + Koa.js中使用JWT认证 <i class="fa fa-chevron-right"></i>
+              </a>
+            
           </div>
         </div>
       
@@ -642,7 +654,7 @@ Vue.use(MessageBox);
           
             <div class="site-state-item site-state-posts">
               <a href="/archives/">
-                <span class="site-state-item-count">9</span>
+                <span class="site-state-item-count">10</span>
                 <span class="site-state-item-name">日志</span>
               </a>
             </div>
@@ -664,7 +676,7 @@ Vue.use(MessageBox);
             
             <div class="site-state-item site-state-tags">
               <a href="/tags/index.html">
-                <span class="site-state-item-count">16</span>
+                <span class="site-state-item-count">20</span>
                 <span class="site-state-item-name">标签</span>
               </a>
             </div>
